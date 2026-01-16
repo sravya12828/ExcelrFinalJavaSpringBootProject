@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+	<style>
+	    body {
+	        background: linear-gradient(135deg, #181a1f, #20242b, #1b1e24);
+	        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+	        color: #e4e6eb;
+	        margin: 0;
+	        min-height: 100vh;
+	    }
+
+	    h2 {
+	        text-align: center;
+	        margin-top: 60px;
+	        margin-bottom: 20px;
+	        font-weight: 600;
+	        color: #f5f6f7;
+	        letter-spacing: 0.5px;
+	    }
+
+	    form {
+	        background: linear-gradient(180deg, #22262d, #1d2026);
+	        padding: 30px;
+	        border-radius: 16px;
+	        box-shadow: 0 14px 40px rgba(0, 0, 0, 0.6);
+	        width: 400px;
+	        margin: 0 auto;
+	    }
+
+	    label {
+	        display: block;
+	        margin-top: 18px;
+	        margin-bottom: 6px;
+	        font-weight: 500;
+	        color: #cfd3da;
+	    }
+
+	    input[type="email"],
+	    input[type="password"] {
+	        width: 100%;
+	        padding: 10px;
+	        border-radius: 8px;
+	        border: 1px solid #343a44;
+	        background-color: #15181d;
+	        color: #f0f2f5;
+	        box-sizing: border-box;
+	        font-size: 14px;
+	    }
+
+	    input::placeholder {
+	        color: #9aa0aa;
+	    }
+
+	    input:focus {
+	        outline: none;
+	        border-color: #5fd1c6;
+	        box-shadow: 0 0 0 1px rgba(95, 209, 198, 0.4);
+	    }
+
+	    button {
+	        margin-top: 25px;
+	        width: 100%;
+	        padding: 12px;
+	        background-color: #5fd1c6;
+	        border: none;
+	        border-radius: 8px;
+	        font-size: 16px;
+	        font-weight: 600;
+	        color: #0f1115;
+	        cursor: pointer;
+	        transition: background-color 0.3s ease;
+	    }
+
+	    button:hover {
+	        background-color: #7fe3da;
+	    }
+
+	    .error {
+	        text-align: center;
+	        margin-top: 15px;
+	        color: #ff6b6b;
+	        font-weight: 500;
+	    }
+
+	    .link {
+	        text-align: center;
+	        margin-top: 25px;
+	        color: #cfd3da;
+	    }
+
+	    .link a {
+	        color: #5fd1c6;
+	        font-weight: 500;
+	        text-decoration: none;
+	    }
+
+	    .link a:hover {
+	        color: #7fe3da;
+	        text-decoration: underline;
+	    }
+	</style>
+
+</head>
+<body>
+
+   
+    <h2>Login</h2>
+
+    <form th:action="@{/login}" method="post">
+        <label for="email">Email:</label>
+        <input type="email" name="email" id="email" required />
+
+        <label for="pwd">Password:</label>
+        <input type="password" name="pwd" id="pwd" required />
+
+        <div style="text-align: center;">
+            <button type="submit">Login</button>
+        </div>
+    </form>
+
+    <p class="error" th:if="${error}" th:text="${error}"></p>
+
+    <div class="link">
+        <p>Don't have an account? <a th:href="@{/register}">Register here</a></p>
+    </div>
+
+</body>
+</html>

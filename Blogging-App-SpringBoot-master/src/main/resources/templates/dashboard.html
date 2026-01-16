@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+
+    <style>
+        body {
+            background: linear-gradient(135deg, #181a1f, #20242b, #1b1e24);
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            color: #e4e6eb;
+            margin: 0;
+            padding: 30px;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: linear-gradient(90deg, #23272f, #2b3038);
+            padding: 14px 24px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.55);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-left a {
+            color: #cfd3da;
+            text-decoration: none;
+            margin-right: 20px;
+            font-weight: 500;
+        }
+
+        .nav-left a:first-child {
+            font-weight: 600;
+            color: #f5f6f7;
+        }
+
+        .nav-left a:hover {
+            color: #ffffff;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .profile-icon img {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            border: 2px solid #5fd1c6;
+            object-fit: cover;
+            margin-right: 12px;
+            cursor: pointer;
+        }
+
+        .nav-right a {
+            color: #cfd3da;
+            text-decoration: none;
+            margin-left: 16px;
+            font-weight: 500;
+        }
+
+        .nav-right a:hover {
+            color: #ffffff;
+        }
+
+        h1 {
+            margin-bottom: 15px;
+            font-weight: 600;
+            color: #f5f6f7;
+        }
+
+        .search-container {
+            margin-bottom: 20px;
+        }
+
+        .search-container input {
+            padding: 8px 10px;
+            width: 280px;
+            border-radius: 8px;
+            border: 1px solid #343a44;
+            background-color: #15181d;
+            color: #f0f2f5;
+        }
+
+        .search-container button {
+            padding: 8px 14px;
+            margin-left: 6px;
+            border-radius: 8px;
+            border: none;
+            background-color: #5fd1c6;
+            color: #0f1115;
+            font-weight: 600;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: linear-gradient(180deg, #22262d, #1d2026);
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 14px 40px rgba(0, 0, 0, 0.6);
+        }
+
+        th, td {
+            padding: 14px 16px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #1b1e24;
+            color: #cfd3da;
+            font-weight: 600;
+        }
+
+        td {
+            border-bottom: 1px solid #2f333c;
+        }
+
+        tr:hover {
+            background-color: rgba(95, 209, 198, 0.06);
+        }
+
+        .btn {
+            padding: 6px 12px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .btn-edit {
+            background-color: #5fd1c6;
+            color: #0f1115;
+            margin-right: 6px;
+        }
+
+        .btn-delete {
+            background-color: #ff6b6b;
+            color: #0f1115;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="navbar">
+
+    <div class="nav-left">
+        <a th:href="@{/dashboard}">ExcelR Blog App</a>
+        <a th:href="@{/dashboard}">Posts</a>
+        <a th:href="@{/create}">New Post</a>
+        <a th:href="@{/comments}">Comments</a>
+    </div>
+
+    <div class="nav-right">
+
+        <a th:href="@{/profile}" th:if="${session.user != null}" class="profile-icon">
+            <img th:src="${session.user.profileImage != null}
+                    ? @{/uploads/{img}(img=${session.user.profileImage})}
+                    : @{/images/profile.png}">
+        </a>
+
+        <a th:if="${session.user != null}" th:href="@{/logout}">
+            Logout
+        </a>
+    </div>
+</div>
+
+<h1>List of Blog Posts</h1>
+
+<div class="search-container">
+    <form th:action="@{/search}" method="get">
+        <input type="text" name="query" placeholder="Search by title..." />
+        <button type="submit">Search</button>
+    </form>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Post Title</th>
+            <th>Post Short Description</th>
+            <th>Post Created On</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="post, iterStat : ${posts}">
+            <td th:text="${iterStat.index + 1}"></td>
+            <td th:text="${post.title}"></td>
+            <td th:text="${post.description}"></td>
+            <td th:text="${#temporals.format(post.createdOn, 'dd MMM yyyy')}"></td>
+            <td>
+                <a th:href="@{/edit/{id}(id=${post.id})}" class="btn btn-edit">Edit</a>
+                <a th:href="@{/delete/{id}(id=${post.id})}" class="btn btn-delete">Delete</a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

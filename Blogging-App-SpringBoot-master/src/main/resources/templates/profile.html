@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>User Profile</title>
+
+    <style>
+        body {
+            background: linear-gradient(135deg, #181a1f, #20242b);
+            font-family: "Segoe UI", sans-serif;
+            color: #e4e6eb;
+        }
+
+        .profile-card {
+            max-width: 420px;
+            margin: 80px auto;
+            padding: 30px;
+            border-radius: 16px;
+            background: #1e2229;
+            box-shadow: 0 20px 40px rgba(0,0,0,.6);
+            text-align: center;
+        }
+
+        .profile-img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 3px solid #5fd1c6;
+            object-fit: cover;
+            margin-bottom: 15px;
+        }
+
+        .btn {
+            background: #5fd1c6;
+            color: #0f1115;
+            font-weight: 600;
+            padding: 8px 14px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: #7fe3da;
+        }
+    </style>
+</head>
+<body>
+
+<div class="profile-card">
+    <h2>User Profile</h2>
+
+    <img class="profile-img"
+         th:src="${user.profileImage != null} ?
+                 @{/uploads/{img}(img=${user.profileImage})} :
+                 @{/images/profile.png}" />
+
+    <p><strong>Email:</strong> <span th:text="${user.email}"></span></p>
+    <p><strong>Total Posts:</strong> <span th:text="${postCount}"></span></p>
+
+    <form th:action="@{/profile/upload}" method="post" enctype="multipart/form-data">
+        <input type="file" name="image" accept="image/*" required>
+        <br><br>
+        <button class="btn" type="submit">Upload Photo</button>
+    </form>
+
+    <br>
+    <a th:href="@{/dashboard}" class="btn">Back to Dashboard</a>
+</div>
+
+</body>
+</html>

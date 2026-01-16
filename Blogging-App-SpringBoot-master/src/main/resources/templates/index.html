@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ExcelR Blog App</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: linear-gradient(135deg, #181a1f, #20242b, #1b1e24);
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            color: #e4e6eb;
+            min-height: 100vh;
+        }
+
+        a { text-decoration: none; }
+
+        .navbar {
+            background: linear-gradient(90deg, #23272f, #2b3038);
+            border-radius: 12px;
+            margin-top: 20px;
+            padding: 14px 24px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.55);
+        }
+
+        .navbar-brand {
+            font-size: 22px;
+            font-weight: 600;
+            color: #f5f6f7 !important;
+        }
+
+        .navbar .nav-link {
+            color: #cfd3da !important;
+            font-weight: 500;
+            margin-left: 14px;
+        }
+
+        .navbar .nav-link:hover {
+            color: #ffffff !important;
+        }
+
+        /* Profile icon */
+        .profile-icon img {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            border: 2px solid #5fd1c6;
+            object-fit: cover;
+        }
+
+        .container > .row,
+        .container > nav,
+        .container > .footer {
+            background: linear-gradient(180deg, #22262d, #1d2026);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 30px;
+            box-shadow: 0 14px 40px rgba(0, 0, 0, 0.6);
+        }
+
+        .card {
+            background: linear-gradient(180deg, #262b33, #20242b);
+            border-radius: 14px;
+            margin-bottom: 25px;
+        }
+
+        .search-box {
+            background: linear-gradient(180deg, #262b33, #20242b);
+            padding: 22px;
+            border-radius: 14px;
+        }
+
+        .footer {
+            background: linear-gradient(90deg, #23272f, #2b3038);
+            color: #cfd3da;
+            text-align: center;
+            border-radius: 12px;
+            padding: 12px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <nav class="navbar navbar-expand-lg navbar-dark">
+
+        <a class="navbar-brand" th:href="@{/dashboard}">ExcelR Blog App</a>
+
+        <div class="navbar-nav ml-auto align-items-center">
+
+            <a class="nav-link" th:href="@{/dashboard}">Home</a>
+
+            <a class="nav-link profile-icon"
+               th:if="${session.user != null}"
+               th:href="@{/profile}"
+               title="Profile">
+                <img th:src="${session.user.profileImage != null}
+                        ? @{/uploads/{img}(img=${session.user.profileImage})}
+                        : @{/images/profile.png}">
+            </a>
+
+            <a class="nav-link"
+               th:if="${session.user != null}"
+               th:href="@{/logout}">
+                Logout
+            </a>
+
+            <a class="nav-link"
+               th:if="${session.user == null}"
+               th:href="@{/register}">
+                Register
+            </a>
+
+            <a class="nav-link"
+               th:if="${session.user == null}"
+               th:href="@{/login}">
+                Login
+            </a>
+
+        </div>
+    </nav>
+</div>
+
+<div class="container mt-4">
+    <div class="row">
+
+        <div class="col-md-9">
+            <div th:each="post : ${posts}">
+                <div class="card">
+                    <div class="card-body">
+                        <h5>
+                            <a th:href="@{'/view/' + ${post.id}}"
+                               th:text="${post.title}">Post</a>
+                        </h5>
+                        <small th:text="${#temporals.format(post.createdOn, 'dd MMM yyyy')}"></small>
+                        <p>
+                            <span th:utext="${#strings.abbreviate(post.content, 100)}"></span>
+                            <a th:href="@{'/view/' + ${post.id}}">Read more</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="search-box">
+                <h5>Blog Search</h5>
+                <form th:action="@{/search}" method="get">
+                    <input type="text" name="query" class="form-control mb-2"
+                           placeholder="Search blogs..." th:value="${query}">
+                    <button type="submit" class="btn btn-primary btn-block">Search</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="container">
+    <div class="footer">
+        © 2023 ExcelR. All rights reserved.
+    </div>
+</div>
+
+</body>
+</html>
